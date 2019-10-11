@@ -1,0 +1,498 @@
+\documentclass[a4paper]{tufte-book}%nohyper,tufte-handout,twoside
+
+\usepackage[UTF8, heading = true]{ctex}
+%\usepackage{hyperref}%bookmark
+
+%\hypersetup{colorlinks} % Comment this line if you don't wish to have colored links
+\usepackage{mathtools,graphicx} % Needed to insert images into the document
+\usepackage{fancyvrb} % Allows customization of verbatim environments
+\usepackage{tikz}
+\usepackage{xspace} % Used for printing a trailing space better than using a tilde (~) using the \xspace command
+\usepackage{xcolor} % for colour
+\usepackage{xtab}
+\usepackage{multirow}
+\usepackage{longtable,pdflscape,booktabs}
+\usepackage{tabu}
+\usetikzlibrary{positioning}
+
+\usepackage{mathtools,graphicx} % Needed to insert images into the document
+\graphicspath{{graphics/}} % Sets the default location of pictures
+\setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio} % Improves figure scaling
+
+\usepackage{fancyvrb} % Allows customization of verbatim environments
+\usepackage{tikz}
+\usepackage{listings} 
+
+\usepackage{amsthm}
+\usepackage{enumitem}
+
+%\fvset{fontsize=\normalsize} % The font size of all verbatim text can be changed here
+
+\newcommand{\hangp}[1]{\makebox[0pt][r]{(}#1\makebox[0pt][l]{)}} % New command to create parentheses around text in tables which take up no horizontal space - this improves column spacing
+\newcommand{\hangstar}{\makebox[0pt][l]{*}} % New command to create asterisks in tables which take up no horizontal space - this improves column spacing
+
+\usepackage{ifxetex}
+\ifxetex
+\newcommand{\textls}[2][5]{%
+	\begingroup\addfontfeatures{LetterSpace=#1}#2\endgroup
+}
+\renewcommand{\allcapsspacing}[1]{\textls[15]{#1}}
+\renewcommand{\smallcapsspacing}[1]{\textls[10]{#1}}
+\renewcommand{\allcaps}[1]{\textls[15]{\MakeTextUppercase{#1}}}
+\renewcommand{\smallcaps}[1]{\smallcapsspacing{\scshape\MakeTextLowercase{#1}}}
+\renewcommand{\textsc}[1]{\smallcapsspacing{\textsmallcaps{#1}}}
+\usepackage{fontspec}
+\fi
+
+
+
+
+\def\chpcolor{blue!45}
+\def\chpcolortxt{blue!60}
+\def\sectionfont{\sffamily\LARGE}
+
+\lstset{% general command to set parameter(s)
+	basicstyle=\small\ttfamily, %\scriptsize
+	commentstyle=\ttfamily\color{gray},
+	numbers=none,
+	frame=bt,
+	backgroundcolor=\color{white},
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false,
+	tabsize=2,
+	captionpos=b,
+	breaklines=true,
+	breakatwhitespace=false,
+	title=\lstname,
+	escapeinside={},
+	keywordstyle=\color{blue!70},
+	morekeywords={}
+}
+
+%----------------------------------------------------------------------------------------
+%	BOOK META-INFORMATION
+%----------------------------------------------------------------------------------------
+
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{Definition}{\hspace{2em}定义}[section]
+
+\theoremstyle{definition}
+\newtheorem{exmp}{Example}[section]
+\newtheorem{Example}{\hspace{2em}例}[section]
+
+\title{风险测量技术规程}
+%\author{风险测量组}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+%\begin{abstract}。\end{abstract}
+
+%\section{knn介绍}
+\chapter{项目概要}
+\section{项目背景}
+习近平总书记指出，要运用大数据提升国家治理现代化水平，实现政府决策科学化。党的十九大提出总体国家安全观，是习近平新时代中国特色社会主义思想的重要内容。进出口安全是国家安全的重要组成部分，海关作为进出境监督管理机关，既是进入我国关境的“第一关口”，也是走出国门的“最后防线”。
+
+当前，随着经济全球化的快速发展、对外交往日益频繁、新型贸易业态蓬勃发展、非传统领域安全因素不断增加，海关监管的进出境货物、运输工具、动植物和人员的体量不断增大、类别日趋繁多，口岸安全风险的联动性、叠加性及不确定性也更加复杂。传统海关监管方式带来风险防控效能渐显不足、人力资源捉襟见肘，亟待利用大数据、人工智能等新技术，创新风险防控安全风险的手段与监管资源的调配方式。
+
+在大数据时代，海关已融入到国家大数据战略建设当中，模型建设作为海关大数据建设的一部分，已在“百日攻关”一期开展了有益的尝试，进一步推动了海关大数据应用的发展。
+
+利用大数据技术开展风险水平测量，是时代的必然要求。通过构建海关风险测量指标体系，建设伪满报风险测量模型，寻找重点口岸、重点企业、重点商品等信息与风险状况之间的关联性，有效测量口岸实时风险水平，为智能化风险感知、甄别、资源调配、处置与评估等打下基础。利用大数据，通过风险水平测量在监管资源分配上的不断探索，有效发挥大数据在防控全过程、全领域综合防控中的作用，这既是客观现实的需要，也是彻底变革海关风险防控方式的有效途径。
+
+为深入贯彻学习习总书记关于大数据应用工作的重要指示精神,落实倪署长在“百日攻关”（一期）汇报会上指示要求,坚持用好、管好、实用的原则，现根据百日攻关二期项目开展要求，进行风险测量模型构建。
+
+\section{建设目标}
+本项目从历史查验、查获、缉私等数据入手分析，提取具备“伪瞒报”风险的特征指标，赋予风险等级，通过业务专家知识经验与机器学习技术相结合，提取风险特征并进行加工，形成系统的风险测量特征指标集。在百日攻关一期相关工作成果基础上，以报关单综合分值为基础，结合伪瞒报风险测量特征指标集，选择并确定适合本项目目标的模型算法进行测试集数据模型训练，构建各现场实点风险测量模型，形成风险测量模型构建方案。通过所构建模型测量12个业务大关实点风险水平。
+
+同时，尝试开展新发风险、政策性风险、偶发重大类风险的风险水平的测量研究，通过内部数据提取与外部数据对接，将统计学理论与机器学习等大数据技术相结合构建专项风险水平测量模型。在构建模型基础上，通过建立风险测量技术规程，将风险测量开展的过程系统化、规范化，为今后开展风险测量提供方向和思路，为风险测量未来发展打好基础。
+
+\section{建设原则}
+本项目建设过程中，应遵循基于现状，统筹规划，统一设计，整合资源，先进适用，务求实效，继承成果，深化发展八大核心原则，同时应遵循如下建设原则：
+
+\begin{itemize}
+	\item {通用性：}模型设计应具备一定的通用性，可以应用到不同的口岸和维度；
+	\item {可扩展：}模型设计应满足一定的可扩展性，可以横向延伸到更多功能；
+	
+	\item {开放性：}模型设计应可根据客户需要不断的进行更新，方便模型的升级，并能与其他业务系统进行对接；
+	\item{继承性：}模型设计应充分考虑利用现有的硬件设备、软件功能以及环境条件，尽可能的减少软硬件上的浪费，投资上的重复。 
+	\item {安全性：}模型需要符合国家安全标准和海关应用项目安全标准，安全性要求包括但不限于对外接口安全、认证安全、会话管理安全、敏感数据存储、敏感数据传输、输入校验和输出转码。
+\end{itemize}
+
+
+
+
+
+
+
+\chapter{术语和定义}
+
+\section{风险测量模型涉及主要概念}
+若我们被告知一个地儿人多，通常会在我们脑海形成2个概念，一是这个地儿人的数量多；另一个概念是人口密度大。伪瞒报风险与此类似，伪瞒报风险测量也是要测算伪瞒报绝对量，单位时间内伪瞒报报关单总量\footnote{含实际查获伪瞒报票数以及未查验报关单中伪瞒报票数}，伪瞒报密度即伪瞒报报关单占可实施查验报关单总量比率。
+\subsection{伪瞒报关单、伪瞒报数量与伪瞒报率}
+\begin{Definition}{伪瞒报关单}
+	企业申报报关单与实际不符且在一定范围内存在主观故意。
+\end{Definition}
+\begin{Definition}{伪瞒报数量}
+	一段时间和空间范围内，全部申报可实施查验报关单中符合伪瞒报特征的报关单票数。
+\end{Definition}
+\begin{Definition}{伪瞒报率}
+	一段时间和空间范围内，全部申报可实施查验报关单中符合伪瞒报特征的报关单票数占同口径全部可实施查验报关单票数比率。
+\end{Definition}
+
+
+
+\subsection{空间与时间伪瞒报指数}
+伪瞒报数量与伪瞒报率从不同方向给出了风险大小的度量，为便于不同空间和不同时间风险大小对比设计空间和时间2组伪瞒报指数。
+\begin{Definition}{空间伪瞒报指数}
+	特定时间条件下，空间内每个样本的伪瞒报数量与空间内伪瞒报数量算术平均比作为空间伪瞒报指数。
+\end{Definition}
+
+\begin{Definition}{时间伪瞒报指数}
+	特定空间条件下，以特定时间为伪瞒报数量为基，不同时间段伪瞒报数量与基的比作为该特定特定空间下的时间伪瞒报指数。
+\end{Definition}
+
+定义较抽象，下面给出2个具体例子。
+
+\begin{Example}空间伪瞒报指数。
+表\ref{tab:space index table}系2020年6月年获得12个海关伪瞒报数量，12个海关算术平均伪报数量为187.8票，每个海关伪瞒报数量与187.8比作为空间伪瞒报指数。
+
+\begin{center}
+	\begin{longtable}{l|r|r}
+		\caption{空间伪瞒报指数} \label{tab:space index table} \\
+		
+		\hline \multicolumn{1}{l|}{\textbf{海关}} & \multicolumn{1}{l|}{\textbf{伪瞒报量}} & \multicolumn{1}{l}{\textbf{空间指数}} \\ \hline 
+		\endfirsthead
+		
+		\multicolumn{3}{c}%
+		{{\bfseries \tablename\ \thetable{} -- 接上页}} \\
+		\hline \multicolumn{1}{l|}{\textbf{海关}} & \multicolumn{1}{l|}{\textbf{伪瞒报量}} & \multicolumn{1}{l}{\textbf{空间指数}} \\ \hline  
+		\endhead
+		
+		\hline \multicolumn{3}{r}{{下页续}} \\ \hline
+		\endfoot
+		
+		\hline \hline
+		\endlastfoot
+		HG1&257&136.8\\
+		HG2&249&132.6\\
+		HG3&248&132.0\\
+		HG4&244&129.9\\
+		HG5&209&111.3\\
+		HG6&207&110.2\\
+		HG7&182&96.9\\
+		HG8&181&96.4\\
+		HG9&141&75.1\\
+		HG10&119&63.4\\
+		HG11&113&60.2\\
+		HG12&104&55.4\\
+	\end{longtable}
+\end{center}
+\end{Example}
+
+
+\begin{Example}时间伪瞒报指数。
+	表\ref{tab:time index table}系给出了某海关2020年前38周伪瞒报数量，假定风险测量系统上线前一周为基期，该海关基期伪瞒报数量为47，据此计算该海关伪瞒报时间价格指数。
+	
+	\begin{center}
+		\begin{longtable}{r|r|r}
+			\caption{时间伪瞒报指数} \label{tab:time index table} \\
+			
+			\hline \multicolumn{1}{l|}{\textbf{时间(周)}} & \multicolumn{1}{l|}{\textbf{伪瞒报量}} & \multicolumn{1}{l}{\textbf{时间指数}} \\ \hline 
+			\endfirsthead
+			
+			\multicolumn{3}{c}%
+			{{\bfseries \tablename\ \thetable{} -- 接上页}} \\
+			\hline \multicolumn{1}{l|}{\textbf{时间(周)}} & \multicolumn{1}{l|}{\textbf{伪瞒报量}} & \multicolumn{1}{l}{\textbf{时间指数}} \\ \hline  
+			\endhead
+			
+			\hline \multicolumn{3}{r}{{下页续}} \\ \hline
+			\endfoot
+			
+			\hline \hline
+			\endlastfoot
+			1&26&55.3\\
+			2&35&74.5\\
+			3&47&100.0\\
+			4&42&89.4\\
+			6&32&68.1\\
+			5&49&104.3\\
+			7&30&63.8\\
+			8&58&123.4\\
+			9&54&114.9\\
+			10&36&76.6\\
+			11&39&83.0\\
+			12&82&174.5\\
+			13&55&117.0\\
+			14&47&100.0\\
+			15&61&129.8\\
+			16&68&144.7\\
+			17&47&100.0\\
+			18&38&80.9\\
+			19&52&110.6\\
+			20&45&95.7\\
+			21&49&104.3\\
+			22&66&140.4\\
+			23&65&138.3\\
+			24&62&131.9\\
+			25&52&110.6\\
+			26&45&95.7\\
+			27&35&74.5\\
+			28&36&76.6\\
+			29&48&102.1\\
+			30&55&117.0\\
+			31&60&127.7\\
+			32&66&140.4\\
+			33&64&136.2\\
+			34&26&55.3\\
+			35&33&70.2\\
+			36&37&78.7\\
+			37&27&57.4\\
+			38&31&66.0\\
+		\end{longtable}
+	\end{center}
+\end{Example}
+
+\subsection{未知风险判定方法}
+构建未知风险判定指标，依据系统布控指令模拟布控指令抓取报关数据，依据建立好的机器学习模型模拟对此数据贴伪瞒报标签，模拟出形成一段空间和时间内的查验数据与其伪瞒报标签，在获取实际查验数据后，对实际数据贴标签，分别计算模拟查验数据与实际查验数据的未知风险判定指标结果，建立统计量对未知风险进行检验，据此判定是否存在未知风险。
+
+\section{机器学习相关术语含义}
+
+\subsection{样本空间}
+样本空间数据为贴伪瞒报风险标签数据作为样本空间数据。2019年前9个月全部可实施查验报关单5572万票，查验123.8万票，查验率为2.22\%。
+\subsection{维度}
+每个统计指标认定为一个维度。
+\subsection{黑样本与白样本}
+黑样本是指样本空间里面贴了5级伪瞒报标签的数据。
+白样本指样本空间里面除了黑样本外都是白样本。
+
+
+
+
+
+\chapter{数据来源与口径}
+\section{主要数据表}
+数据来源是海关在阿里云备份数据。
+
+\begin{itemize}
+     \item 报关单表头(hjc.f\_ENTRY\_HEAD)、报关单表体(hjc.f\_ENTRY\_LIST)
+	 \item 查验表头(hjc.f\_RSK\_EXAM\_HEAD\_REL)、查验表体(hjc.f\_RSK\_EXAM\_LIST\_REL)
+	 \item 舱单数据(hjc.f\_MANIFEST\_COP\_NEW,hjc.f\_MANIFEST\_CHK\_NEW)
+	 \item 缉私刑事案件表(hjc.f\_js\_sjjhjc2\_xs\_ajjbxx)、缉私行政案件表(hjc.f\_js\_sjjhjc2\_xz\_ajjbxx)
+	 \item 企业信息(hjc.f\_COMPANY\_REL)
+	 \item 报关单工作流信息(hjc.f\_ENTRY\_WORKFLOW)
+	 \item 报关单修改日志(hjc.f\_ENTRY\_MODI\_LOG)
+	 \item 集装箱表(hjc.f\_ENTRY\_CONTAINER)
+	 \item 综合分类表(hjc.f\_APP\_COMPLEX)
+\end{itemize}
+
+\section{部分指标口径与查询实现方式}
+
+\subsection{可实施查验报关单票数}
+在报关单结关处理日期范围内，监管方式、EDI申报备注符合计算口径的报关单票数和在报关单删单日期范围内，报关单号符合计算口径的报关单票数之和。
+
+指标计算口径，满足以下两组条件之一：
+
+第一组共４个条件：
+\begin{itemize}
+	\item 环节号（STEP\_ID）为“80000000”。环节号说明：“80000000”——货物放行（结关）
+	\item 符合以下两个条件之一，第一EDI申报备注（EDI\_REMARK）第7位不为“C”。第二，EDI申报备注第15位不为“1”。申报备注说明：第7位为“保税区进出境备案清单标志或内贸货物备案清单标志”，“C”——表示该单为保税区进出境备案清单；第15位为“报关单或备案清单“两单一审”标志”，“1”——“两单一审”的报关单或备案清单。
+	\item 监管方式（TRADE\_MODE）不为空
+	\item 监管方式TRADE\_MODE不为“0200”——料件销毁，“0245” ——来料料件内销，“0255” ——来料深加工，“0258” ——来料余料结转，“0345” ——来料成品减免，“0400” ——边角料销毁，“0446” ——加工设备内销，“0456” ——加工设备结转，“0500” ——减免设备结转，“0642” ——进料以产顶进，“0644” ——进料料件内销，“0654” ——进料深加工，“0657” ——进料余料结转，“0744” ——进料成品减免，“0844” ——进料边角料内销，“0845” ——来料边角料内销，“1139” ——国轮油物料，“9639” ——海关处理货物，“9700” ——后续补税，“9800” ——租赁征税，“9839” ——留赠转卖物品。。
+\end{itemize}
+
+
+第二组共一个条件:
+ 报关单表头删除日志的报关单号（ENTRY\_ID）在查验记录单表头中存在。
+环节号、监管方式、EDI申报备注的详细信息可以在业务参数表工作流环节说明、TRADE、EDI\_REMARK中查询。
+
+\paragraph {阿里云可实施查验报关单票数脚本}
+\begin{lstlisting}[language={SQL},caption={可实施查验报关单票数},label={can check number entryID} ] 
+SELECT COUNT(DISTINCT ENTRY_ID)  AS cnt
+FROM 
+(SELECT ENTRY_ID
+FROM hjc.f_ENTRY_HEAD H WITH(NOLOCK)
+WHERE EXISTS (
+SELECT 1 FROM hjc.f_ENTRY_WORKFLOW W WITH(NOLOCK)
+WHERE STEP_ID='80000000'
+AND CREATE_DATE>= '2019-01-01 00:00:00' 
+AND CREATE_DATE< '2019-02-01 00:00:00'
+AND H.ENTRY_ID = W.ENTRY_ID)
+AND (SUBSTRING(EDI_REMARK,7,1) <> 'C' 
+OR SUBSTRING(EDI_REMARK,15,1) <> '1')
+AND TRADE_MODE NOT IN  ('0200','0245','0255','0258','0345','0400','0446','0456','0500','0642','0644','0654','0657','0744','0844','0845','1139','9639','9700','9800','9839')
+AND H.part_by_day in (select max(part_by_day) from hjc.f_ENTRY_HEAD )
+AND W.part_by_day in (select max(part_by_day) from hjc.f_ENTRY_WORKFLOW )
+UNION
+SELECT DH.ENTRY_ID
+FROM hjc.f_ENTRY_DEL_HEAD_LOG DH WITH(NOLOCK)
+WHERE EXISTS (SELECT 1 
+FROM hjc.f_RSK_EXAM_HEAD_REL RH WITH(NOLOCK)
+WHERE RH.ENTRY_ID = DH.ENTRY_ID)
+AND DH.OP_TIME >= '2019-01-01 00:00:00'
+AND DH.OP_TIME <  '2019-02-01 00:00:00'
+AND DH.part_by_day in (select max(part_by_day) from hjc.f_ENTRY_DEL_HEAD_LOG )
+AND RH.part_by_day in (select max(part_by_day) from hjc.f_RSK_EXAM_HEAD_REL )
+) A
+
+\end{lstlisting}
+
+\subsection{企业信用等级}
+
+申报单位企业信用等级，
+根据报关单表头表体（ST）中
+审核状态字（status\_result）第100 位进行判断，“1”为高级认证企业，“2”和“3”
+为一般认证企业，“4”为一般信用企业，“5”、“6”为失信企业。
+
+经营单位企业信用等级（class\_flag）的判定：根据报关单表头表体（ST）中
+审核状态字（status\_result）第74 位进行判断，“1”为高级认证企业，“2”和“3”
+为一般认证企业，“4”为一般信用企业，“5”、“6”为失信企业。其中，对于高级认
+证企业，若对应的申报单位企业信用等级在一般信用企业及以上，则经营单位企业信
+用等级认定为高级认证企业；否则经营单位企业信用等级调整为一般认证企业。
+
+\subsection{生产型企业}
+报关单表头表体（ST）中审核状态字（status\_result）第50 位为“1”是生产型一般认证企业（A1）；第50 位不为
+“1”是非生产型一般认证企业（A2）。
+
+\chapter{模型功能性需求}
+\section{模型功能概述}
+模型功能分为2个部分，预定式输出和定制输出。预定式输出是常规结果，以作业方式在后台执行，执行结果存放在管理网数据库中，用户通过窗口选择按钮，查看计算的风险结果；另一部分是定制输出。
+\section{模型数据资源需求}
+数据源取自阿里云平台，运算结果展示在海关管理网。
+
+\section{模型算法要求}\label{sec:algorithm of model}
+
+
+\begin{enumerate}[label=(\roman*)]
+	\item 准确。对历史数据有较好拟合，对不同模型设定不同交叉验证准确度阈值，达到特定阈值模型才可采用。
+	\item 时效。一是模型运行时效，对于新增的样本数据，能在6小时内完成贴标签工作。二是模型重新设定参数时效，对于确定采用的模型，重新拟合一次，达到采用标准确性的，时间要求在12小时内可以完成。
+	\item 拓展。能够较为便利增加预测变量和响应变量。
+\end{enumerate}
+
+\section{模型输入输出需求}
+\subsection{模型输入变量}
+%根据\ref{sec:data demand}
+根据伪瞒报风险测量判定标准，对历史查验数据贴标签，以含标签报关单为检索字段，从报关单表头表体、查验表头表体和相应舱单数据采集到特定字段和标签作为预测变量，特定字段具体包括：
+\subsubsection{预测变量}
+预测变量(自变量)中的属性变量包括：进出境口岸代码、贸易方式、运输方式、进出口标识、原产国（
+最终目的国）
+、指运港(抵运港)、卸货地代码、
+、企业资信、商品4位编码等。
+
+预测变量(自变量)中数值变量包括：毛重、美元值、实征税款、申报时间与0点时差等。
+\subsubsection{响应变量}
+响应变量(因变量)：6级风险标签。
+\section{模型训练指标需求}
+\subsection{模型训练周期和报关单贴标签周期}
+\paragraph{模型训练周期}
+模型训练周期拟定为每周，每周6零时执行，以前推2年的训练样本，训练出新的分类规则供下周贴标签使用。
+\paragraph{数据贴标签周期}
+每日零时开始依据本周分类规则对前一日全部申报报关单贴6级风险标签。
+
+\subsection{采集预测变量}
+每日0时从查验表头表体采集采集训练样本，部分查验表中不能采集到数据从报关单和舱单数据表中采集。将此采集到的预测变量按照设定贴标签规则贴风险等级标签，作为模型训练样本。
+
+\subsection{采集预测变量}
+每日0时从查验表头表体采集采集训练样本，部分查验表中不能采集到数据从报关单和舱单数据表中采集。将此采集到的预测变量按照设定贴标签规则贴风险等级标签，作为模型训练样本。
+
+
+\subsection{执行查询作业}
+
+\subsubsection{常规查询作业}常规查询从关区（重点现场）、行业（重点商品）、企业（重点企业）3个维度展示风险水平的空间分布和时间分布。空间分布是指在特定时间（周）
+范围内，针对特定行业（重点商品）和企业（重点企业）
+在12个重点关区风险水平的图表展示，例如，一般信用企业大豆风险水平，12个关区风险水品。时间分布是针对特定关
+区、行业、企业组合指标的风险水平的时间序列（2年）展示。例如，青岛关区高级信用企业近2年风险水平时间序列展示。
+
+关区以确定为12个关区，企业维度可借用企管分类维度，重点商品可以近2年高查获商品确定\footnote{时间节点，若采用商品编码表示可以2019年9月底完成，若以通常类别商品表示，时间适当延长。}。
+
+用户提交特定范围查询，直接在表中查询到相关记录，实时给出空间数据和时间序列指标的图标表展示，为方便用户二次开发利用，提供指标下载功能。
+\paragraph{常规查询结果表结构}
+以作业模式定时在后台执行，结果在表中记录，实时查询表中记录反馈查询结果。空间风险水平以周为统计区间，每天执行一次。表结构(表
+\ref{tab:normal query table})如下:
+
+\begin{center}
+	\begin{longtable}{l|l|l}
+		\caption[Feasible triples for a highly variable Grid]{常规查询结果后台存储表结构.} \label{tab:normal query table} \\
+		
+		\hline \multicolumn{1}{l|}{\textbf{字段名称}} & \multicolumn{1}{l|}{\textbf{类型}} & \multicolumn{1}{l}{\textbf{描述}} \\ \hline 
+		\endfirsthead
+		
+		\multicolumn{3}{c}%
+		{{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
+		\hline \multicolumn{1}{l|}{\textbf{字段名称}} & \multicolumn{1}{l|}{\textbf{类型}} & \multicolumn{1}{l}{\textbf{描述}} \\ \hline  
+		\endhead
+		
+		\hline \multicolumn{3}{|r|}{{Continued on next page}} \\ \hline
+		\endfoot
+		
+		\hline \hline
+		\endlastfoot
+		
+		rDate & DATE & 记录风险测量时间 \\
+		CustomCode & VARCHAR(4) & 记录关区代码 \\
+		codeTs & VARCHAR(12)& 记录重点关注商品编码 \\
+		CoType & int & 记录企业类别 \\
+		rValue & DOUBLE & 记录测量风险水平值\\
+	\end{longtable}
+\end{center}
+
+
+\subsubsection{定制查询作业}
+给定任意维度数据风险水平测量，以按钮生成和Sql语句设定方式给出需要测定风险水平的范围，给出针对这一特定范围的在空间和时间的风险水平。
+
+用户提交查询条件传递到后台服务器，提交时系统对condition进行文本分析，若存在语法错误进行提示，不把查询提交系统，若语义无误将系统，后台完成该条件该查询结果，修正idflag，设计作业定时监控idflag值，若完成查询，通过outlook邮箱将查询结果反馈提交查询人员，风险水平查询人员点击链接可通过网页方式获得设定条件风险的时间和空间展示，并为用户提供下载数据功能。
+
+例如，原产品韩国海运进口风险测量条件如下：
+
+\begin{lstlisting}[language={SQL},caption={原产品韩国海运进口风险测量},label={risk of sourth Korea} ] 
+traf_mode='2' and origin_country='133' and I_E_FLAG='I'
+\end{lstlisting}
+
+\paragraph{定制后台表结构}
+表结构(表
+\ref{tab:special query table})如下:
+
+\begin{center}
+	\begin{longtable}{l|l|l}
+		\caption[Feasible triples for a highly variable Grid]{常规查询结果后台存储表结构.} \label{tab:special query table} \\
+		
+		\hline \multicolumn{1}{l|}{\textbf{字段名称}} & \multicolumn{1}{l|}{\textbf{类型}} & \multicolumn{1}{l}{\textbf{描述}} \\ \hline 
+		\endfirsthead
+		
+		\multicolumn{3}{c}%
+		{{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
+		\hline \multicolumn{1}{l|}{\textbf{字段名称}} & \multicolumn{1}{l|}{\textbf{类型}} & \multicolumn{1}{l}{\textbf{描述}} \\ \hline  
+		\endhead
+		
+		\hline \multicolumn{3}{|r|}{{Continued on next page}} \\ \hline
+		\endfoot
+		
+		\hline \hline
+		\endlastfoot
+		
+		userId & VARCHAR(32) & 提交查询用户 \\
+		condition & Text & sql查询条件 \\
+		rDate & DATE & 记录风险测量时间 \\
+		CustomCode & VARCHAR(4) & 记录关区代码 \\
+		codeTs & VARCHAR(12)& 记录重点关注商品编码 \\
+		CoType & int & 记录企业类别 \\
+		rValue & DOUBLE & 记录测量风险水平值\\
+		idflag & int & 查询是否完成标记\\
+	\end{longtable}
+\end{center}
+
+\chapter{模型展示}
+\end{document}
+
+
+\section{路径}
+
+
+根据前期定义的伪瞒报特征，我们可以将查验报关单数据中贴的伪瞒报标签，以查验数据为样本空间，风险测量问题转换为依据样本空间数据推断总体的伪瞒报数量和伪瞒报率。
+\subsection{事件、率与水平}
+事件是统计学基本概念，进行伪瞒报测量绕不开事件。若每一起伪瞒报报关单产生为一个伪瞒报事件，
